@@ -1,8 +1,190 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Backend Challenge - Pokémons";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-5">Backend Challenge - Pokémons</h1>
+    <p>Teste da Codesh para testar habilidades de Front Developer</p>
 </div>
+
+<div class="row text-center">
+    <!-- Formulário para buscar um Pokémon pelo ID -->
+    <div class="col-4">
+        <div>
+            <h1 class="display-6">Buscar Pokémon</h1>           
+            <form id="pokemon-form">
+                <div class="input-group mb-3">
+                    <input type="number" class="form-control" id="pokemon-id" required placeholder="Digite o ID do Pokémon:" aria-label="Digite o ID do Pokémon:" aria-describedby="pokemon-id">
+                    <button class="btn btn-outline-primary" type="submit" id="pokemon-id">Busca Pokémon</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Botão para buscar os Pokémons aleatórios -->
+    <div class="col-4">
+        <div>
+            <h1 class="display-6">Pokémons Aleatórios</h1>
+            <button class="btn btn-outline-primary" onclick="getRandomPokemons()">Buscar 10 Pokémons Aleatórios</button>
+        </div>
+    </div>
+</div>
+
+<!-- Div para mostrar o resultado -->
+<div id="pokemon-result" style="margin-top: 20px;">
+    <h3>Resultado:</h3>
+    <div id="result" class="row"></div>
+</div>
+
+<script>
+    // Função para buscar Pokémons aleatórios da API
+    async function getRandomPokemons() {
+        try {
+            // Fazer a requisição GET para a API random
+            const response = await fetch('/api/pokemon/random');
+
+            // Verificar se a resposta foi bem-sucedida
+            if (!response.ok) {
+                throw new Error(`Erro HTTP! status: ${response.status}`);
+            }
+
+            // Parse da resposta JSON
+            const pokemons = await response.json();
+
+            // Selecionar o elemento para exibir os resultados
+            const resultDiv = document.getElementById('result');
+
+            // Limpar os resultados anteriores
+            resultDiv.innerHTML = '';
+
+            // Adicionar os novos resultados na grade
+            pokemons.forEach(pokemon => {
+                const col = document.createElement('div');
+                col.className = 'col-3 mb-2';
+
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.style.minHeight = '230px'
+
+                const cardBody = document.createElement('div');
+                cardBody.className = 'card-body';
+
+                const title = document.createElement('h5');
+                title.className = 'card-title text-center';
+                title.textContent = `${pokemon.name}`;
+
+                const cardtext = document.createElement('p');
+                cardtext.className = 'card-text text-center';
+
+                const figure = document.createElement('figure');
+                figure.className = 'figure mx-auto d-block';
+
+                const image = document.createElement('img');
+                image.className = 'img-fluid';
+                image.src = `${pokemon.sprite}`;
+                image.alt = `${pokemon.name}`;
+
+                const figcaption = document.createElement('figcaption');
+                figcaption.className = 'figure-caption';
+                figcaption.textContent = `#${pokemon.id}`;
+
+                const typesList = document.createElement('ul');
+                typesList.className = 'list-unstyled';
+
+                pokemon.types.forEach(type => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'badge text-bg-dark me-1';
+                    listItem.textContent = `${type}`;
+                    typesList.appendChild(listItem);
+                });
+
+                cardBody.appendChild(title);
+                cardBody.appendChild(cardtext);
+                figure.appendChild(image);
+                figure.appendChild(figcaption);
+                cardtext.appendChild(figure);
+                cardtext.appendChild(typesList);
+                card.appendChild(cardBody);
+                col.appendChild(card);
+                resultDiv.appendChild(col);
+            });
+        } catch (error) {
+            console.error('Erro ao buscar Pokémons:', error);
+            document.getElementById('result').textContent = 'Erro ao buscar os Pokémons.';
+        }
+    }
+
+    document.getElementById('pokemon-form').addEventListener('submit', async (event) => {
+        event.preventDefault(); // Evita o envio padrão do formulário
+
+        const id = document.getElementById('pokemon-id').value;
+        if (id) {
+            try {
+                const response = await fetch(`/api/pokemon/${id}`);
+
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP! status: ${response.status}`);
+                }
+
+                const pokemon = await response.json();
+
+                const resultDiv = document.getElementById('result');
+
+                // Limpar resultados anteriores
+                resultDiv.innerHTML = '';
+
+                // Criar e adicionar o cartão com informações do Pokémon
+                const col = document.createElement('div');
+                col.className = 'col-3 mb-2';
+
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.style.minHeight = '230px'
+
+                const cardBody = document.createElement('div');
+                cardBody.className = 'card-body';
+
+                const title = document.createElement('h5');
+                title.className = 'card-title text-center';
+                title.textContent = `${pokemon.name}`;
+
+                const cardtext = document.createElement('p');
+                cardtext.className = 'card-text text-center';
+
+                const figure = document.createElement('figure');
+                figure.className = 'figure mx-auto d-block';
+
+                const image = document.createElement('img');
+                image.className = 'img-fluid';
+                image.src = `${pokemon.sprite}`;
+                image.alt = `${pokemon.name}`;
+
+                const figcaption = document.createElement('figcaption');
+                figcaption.className = 'figure-caption';
+                figcaption.textContent = `#${pokemon.id}`;
+
+                const typesList = document.createElement('ul');
+                typesList.className = 'list-unstyled';
+
+                pokemon.types.forEach(type => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'badge text-bg-dark me-1';
+                    listItem.textContent = `${type}`;
+                    typesList.appendChild(listItem);
+                });
+
+                cardBody.appendChild(title);
+                cardBody.appendChild(cardtext);
+                figure.appendChild(image);
+                figure.appendChild(figcaption);
+                cardtext.appendChild(figure);
+                cardtext.appendChild(typesList);
+                card.appendChild(cardBody);
+                col.appendChild(card);
+                resultDiv.appendChild(col);
+            } catch (error) {
+                console.error('Erro ao buscar Pokémon:', error);
+                document.getElementById('result').textContent = 'Erro ao buscar o Pokémon.';
+            }
+        }
+    });
+</script>
