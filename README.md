@@ -25,6 +25,7 @@ Este projeto foi desenvolvido como parte de um desafio técnico proposto pela Coo
 ```bash
 git clone https://github.com/Haltt/Coodesh-Pokemon.git
 cd Coodesh-Pokemon
+```
 
 2. Configure o banco de dados no arquivo appsettings.json:
 ```json
@@ -33,11 +34,13 @@ cd Coodesh-Pokemon
     "DefaultConnection": "Data Source=pokemonDB.db"
   }
 }
+```
 
 3. Execute as migrações para configurar o banco de dados:
 ```bash
 dotnet ef database update
 dotnet run
+```
 
 4. Acesse a documentação da API (Swagger) através do endereço:
 http://localhost:5000/api
@@ -47,6 +50,7 @@ Para utilizar Docker, você pode rodar o seguinte comando:
 
 ```bash
 docker-compose up --build
+```
 
 ### Testes
 Para executar os testes unitários, siga os passos abaixo:
@@ -57,6 +61,7 @@ Abra o terminal na pasta raiz do projeto e execute o comando de teste:
 
 ```bash
 dotnet test
+```
 
 Este comando irá executar todos os testes definidos no projeto.
 
