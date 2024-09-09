@@ -1,6 +1,7 @@
 using Coodesh_Pokemon.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,23 +9,19 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddDbContext<PokemonMasterContext>(options => options.UseSqlite("Data Source=pokemonmaster.db"));
-builder.Services.AddSwaggerGen(options =>
+builder.Services.AddDbContext<PokemonMasterContext>(c => c.UseSqlite("Data Source=pokemonmaster.db"));
+builder.Services.AddSwaggerGen(c =>
 {
-    options.SwaggerDoc("v1", new OpenApiInfo
+    c.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
         Title = "Challenge Pokemon V1",
-        Description = "Listar pokémons, utilizando como base a API",
+        Description = "API para busca de Pokémons e Controle do Mestre Pokémon",
         TermsOfService = new Uri("https://github.com/Haltt/kotas-pokemon"),
         Contact = new OpenApiContact
         {
-            Name = "Contact",
-            Url = new Uri("https://github.com/Haltt/kotas-pokemon")
-        },
-        License = new OpenApiLicense
-        {
-            Name = "License",
+            Name = "Wanderson Teixeira",
+            Email = "wandersonteixeira@live.com",
             Url = new Uri("https://github.com/Haltt/kotas-pokemon")
         }
     });

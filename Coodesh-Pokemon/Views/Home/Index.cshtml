@@ -2,29 +2,68 @@
     ViewData["Title"] = "Backend Challenge - Pokémons";
 }
 
-<div class="text-center">
-    <h1 class="display-5">Backend Challenge - Pokémons</h1>
+<!-- Formulário para buscar um Pokémon pelo ID -->
+<div class="">
+    <h1 class="fs-3">Backend Challenge - Pokémons</h1>
     <p>Teste da Codesh para testar habilidades de Front Developer</p>
 </div>
-
 <div class="row text-center">
-    <!-- Formulário para buscar um Pokémon pelo ID -->
+    <!-- Botão para buscar os Pokémons aleatórios -->
     <div class="col-4">
-        <div>
-            <h1 class="display-6">Buscar Pokémon</h1>           
+        <div class="rounded bg-secondary-subtle px-2 py-2 mb-2">
+            <h1 class="display-6">Buscar Pokémon</h1>
+            <p>Realiza a busca pelo número do Pokémon, atualmente a API retorna um Pokémon entre 1 e 899</p>
             <form id="pokemon-form">
-                <div class="input-group mb-3">
+                <div class="input-group">
                     <input type="number" class="form-control" id="pokemon-id" required placeholder="Digite o ID do Pokémon:" aria-label="Digite o ID do Pokémon:" aria-describedby="pokemon-id">
                     <button class="btn btn-outline-primary" type="submit" id="pokemon-id">Busca Pokémon</button>
                 </div>
             </form>
         </div>
-    </div>
-    <!-- Botão para buscar os Pokémons aleatórios -->
-    <div class="col-4">
-        <div>
+        <div class="rounded bg-secondary-subtle px-2 py-2">
             <h1 class="display-6">Pokémons Aleatórios</h1>
-            <button class="btn btn-outline-primary" onclick="getRandomPokemons()">Buscar 10 Pokémons Aleatórios</button>
+            <p>Realiza a busca de 12 Pokémons de forma aleatória</p>
+            <button class="btn btn-outline-primary" onclick="getRandomPokemons()">Buscar 12 Pokémons Aleatórios</button>
+        </div>
+    </div>
+    <!-- Formulário de Cadastro do Mestre -->
+    <div class="col-4">
+        <div class="rounded bg-success-subtle px-2 py-2">
+            <h1 class="display-6">Mestre Pokémon</h1>
+            <p>Criar seu cadastro de Mestre Pokémon</p>
+            <form id="pokemon-master-form">
+                <div class="form-group mb-2">
+                    <input type="text" class="form-control" id="name" placeholder="Digite seu Nome" required>
+                </div>
+                <div class="form-group mb-2">
+                    <input type="number" class="form-control" id="age" placeholder="Digite sua Idade" required>
+                </div>
+                <div class="form-group mb-2">
+                    <input type="text" class="form-control" id="cpf" placeholder="Digite o CPF (000.000.000-00)" required>
+                </div>
+                <button type="submit" class="btn btn-success mx-auto d-block">Criar Cadastro de Mestre</button>
+            </form>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="rounded bg-warning-subtle px-2 py-2 mb-2">
+            <h1 class="display-6">Capturar Pokémon</h1>
+            <p>Digite seu CPF para realizar uma captura</p>
+            <form id="pokemon-capture-form">
+                <div class="form-group mb-2">
+                    <input type="text" class="form-control" id="cpf-captura" placeholder="Digite seu CPF de mestre (000.000.000-00)" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Capturar Pokémon</button>
+            </form>
+        </div>
+        <div class="rounded bg-warning-subtle px-2 py-2">
+            <h1 class="display-6">Pokémons Capturados</h1>
+            <form id="pokemon-list-form">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="cpf-captura-lista" placeholder="Digite seu CPF de mestre (000.000.000-00)" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Listar Capturas</button>
+            </form>
         </div>
     </div>
 </div>
@@ -32,7 +71,12 @@
 <!-- Div para mostrar o resultado -->
 <div id="pokemon-result" style="margin-top: 20px;">
     <h3>Resultado:</h3>
+    <div id="result-message-capture"></div>
+    <div id="result-message"></div>
+
     <div id="result" class="row"></div>
+    <div id="pokemon-captured" class="row"></div>
+    <div id="pokemon-list" class="row"></div>
 </div>
 
 <script>
@@ -59,14 +103,14 @@
             // Adicionar os novos resultados na grade
             pokemons.forEach(pokemon => {
                 const col = document.createElement('div');
-                col.className = 'col-3 mb-2';
+                col.className = 'col-2 mb-2';
 
                 const card = document.createElement('div');
-                card.className = 'card';
-                card.style.minHeight = '230px'
+                card.className = 'card p-0';
+                card.style.minHeight = '200px'
 
                 const cardBody = document.createElement('div');
-                cardBody.className = 'card-body';
+                cardBody.className = 'card-body p-0';
 
                 const title = document.createElement('h5');
                 title.className = 'card-title text-center';
@@ -92,7 +136,8 @@
 
                 pokemon.types.forEach(type => {
                     const listItem = document.createElement('li');
-                    listItem.className = 'badge text-bg-dark me-1';
+                    var color = "secondary"
+                    listItem.className = `badge p-2 text-bg-${color} me-1`;
                     listItem.textContent = `${type}`;
                     typesList.appendChild(listItem);
                 });
@@ -113,8 +158,14 @@
         }
     }
 
+    //Função para buscar Pokémon por ID
     document.getElementById('pokemon-form').addEventListener('submit', async (event) => {
         event.preventDefault(); // Evita o envio padrão do formulário
+        document.getElementById('result').innerHTML = '';
+        document.getElementById('result-message').innerHTML = '';
+        document.getElementById('result-message-capture').innerHTML = '';
+        document.getElementById('pokemon-list').innerHTML = '';
+        document.getElementById('pokemon-captured').innerHTML = '';
 
         const id = document.getElementById('pokemon-id').value;
         if (id) {
@@ -126,7 +177,6 @@
                 }
 
                 const pokemon = await response.json();
-
                 const resultDiv = document.getElementById('result');
 
                 // Limpar resultados anteriores
@@ -167,7 +217,20 @@
 
                 pokemon.types.forEach(type => {
                     const listItem = document.createElement('li');
-                    listItem.className = 'badge text-bg-dark me-1';
+                    var color = "secondary"
+                    if (type == "water") {
+                        color = "primary"
+                    }
+                    else if (type == "dark") {
+                        color = "dark"
+                    }
+                    else if (type == "fire") {
+                        color = "danger"
+                    }
+                    else if (type == "flying") {
+                        color = "info"
+                    }
+                    listItem.className = `badge p-2 text-bg-${color} me-1`;
                     listItem.textContent = `${type}`;
                     typesList.appendChild(listItem);
                 });
@@ -185,6 +248,143 @@
                 console.error('Erro ao buscar Pokémon:', error);
                 document.getElementById('result').textContent = 'Erro ao buscar o Pokémon.';
             }
+        }
+    });
+
+    //Função para Criar Mestre
+    document.getElementById('pokemon-master-form').addEventListener('submit', async function (event) {
+        event.preventDefault(); // Evita o comportamento padrão do formulário
+        document.getElementById('result').innerHTML = '';
+        document.getElementById('result-message').innerHTML = '';
+        document.getElementById('result-message-capture').innerHTML = '';
+        document.getElementById('pokemon-list').innerHTML = '';
+        document.getElementById('pokemon-captured').innerHTML = '';
+
+        const name = document.getElementById('name').value;
+        const age = document.getElementById('age').value;
+        const cpf = document.getElementById('cpf').value;
+
+        const masterData = {
+            name: name,
+            age: parseInt(age),
+            cpf: cpf
+        };
+
+        try {
+            const response = await fetch('/api/PokemonMasters', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(masterData)
+            });
+
+            const resultMessage = document.getElementById('result-message');
+            resultMessage.innerHTML = ''; // Limpa mensagem anterior
+
+            if (response.ok) {
+                resultMessage.innerHTML = '<div class="alert alert-success">Mestre Pokémon cadastrado com sucesso!</div>';
+            } else {
+                const errorData = await response.json();
+                resultMessage.innerHTML = `<div class="alert alert-danger">${errorData.errors[''] || 'Erro ao cadastrar mestre Pokémon.'}</div>`;
+            }
+        } catch (error) {
+            document.getElementById('result-message').innerHTML = '<div class="alert alert-danger">Erro ao conectar com o servidor.</div>';
+        }
+    });
+
+    //Captura de Pokémon
+    document.getElementById('pokemon-capture-form').addEventListener('submit', async function (event) {
+        event.preventDefault(); // Evita o comportamento padrão do formulário
+
+        const cpfCaptura = document.getElementById('cpf-captura').value;
+
+        try {
+            const response = await fetch(`/api/PokemonCaptures/capture?cpf=${cpfCaptura}`, {
+                method: 'POST'
+            });
+
+            const resultMessage = document.getElementById('result-message');
+            const pokemonCaptured = document.getElementById('result');
+            resultMessage.innerHTML = ''; // Limpa mensagem anterior
+            pokemonCaptured.innerHTML = ''; // Limpa captura anterior
+
+            if (response.ok) {
+                const pokemon = await response.json();
+
+                resultMessage.innerHTML = '<div class="alert alert-success">Pokémon capturado com sucesso!</div>';
+
+                pokemonCaptured.innerHTML = `
+                        <div class="col-2 mb-2">
+                            <div class="card">                                
+                                <div class="card-body">
+                                    <h5 class="card-title text-center">${pokemon.pokemonName}</h5>
+                                    <p class="card-text text-center">
+                                        <img src="${pokemon.pokemonSprite}" class="img-fluid" alt="${pokemon.pokemonName}">
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        `;
+            } else {
+                const errorData = await response.text();
+                resultMessage.innerHTML = `<div class="alert alert-danger">${errorData}</div>`;
+            }
+        } catch (error) {
+            document.getElementById('result-message-capture').innerHTML = '<div class="alert alert-danger">Erro ao conectar com o servidor.</div>';
+        }
+    });
+
+    //Listar Pokémons do Mestre
+    document.getElementById('pokemon-list-form').addEventListener('submit', async function (event) {
+        event.preventDefault(); // Evita o comportamento padrão do formulário
+
+        const cpfCapturaLista = document.getElementById('cpf-captura-lista').value;
+
+        try {
+            const response = await fetch(`/api/PokemonCaptures/by-master/${cpfCapturaLista}`);
+
+            const resultMessage = document.getElementById('result-message');
+            const pokemonList = document.getElementById('result');
+            resultMessage.innerHTML = ''; // Limpa mensagens anteriores
+            pokemonList.innerHTML = ''; // Limpa capturas anteriores
+
+            if (response.ok) {
+                const pokemonsList = await response.json();
+
+                if (pokemonsList.length === 0) {
+                    resultMessage.innerHTML = '<div class="alert alert-info">Nenhum Pokémon capturado encontrado.</div>';
+                } else {
+                    pokemonsList.forEach(pokemon => {
+                        let typesList = '';
+                        let typesArray = pokemon.pokemonTypes.split(', ');
+
+                        typesArray.forEach(type => {
+                            typesList += `<li class="badge p-2 text-bg-secondary me-1">${type}</li>`;
+                        });
+
+                        const pokemonCard = `
+                            <div class="col-2 mb-2">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title text-center">${pokemon.pokemonName}</h5>
+                                        <p class="card-text text-center">
+                                            <img src="${pokemon.pokemonSprite}" class="img-fluid" alt="${pokemon.pokemonName}">
+                                        </p>
+                                        <ul class="list-unstyled">${typesList}</ul>
+                                    </div>
+                                </div>
+                            </div>
+                            `;
+                        pokemonList.innerHTML += pokemonCard;
+                    });
+                }
+            } else {
+                const errorData = await response.text();
+                resultMessage.innerHTML = `<div class="alert alert-danger">${errorData}</div>`;
+            }
+        } catch (error) {
+            document.getElementById('result-message').innerHTML = '<div class="alert alert-danger">Erro ao conectar com o servidor.</div>';
         }
     });
 </script>

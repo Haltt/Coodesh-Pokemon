@@ -6,5 +6,6 @@ namespace Coodesh_Pokemon.Data
     public class PokemonMasterContext(DbContextOptions<PokemonMasterContext> options) : DbContext(options)
     {
         public DbSet<PokemonMaster> PokemonMasters { get; set; }
+        public DbSet<PokemonCapture> PokemonCaptures { get; set; }
     }
 }

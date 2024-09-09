@@ -2,6 +2,7 @@
 using Coodesh_Pokemon.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Coodesh_Pokemon.Migrations
 {
     [DbContext(typeof(PokemonMasterContext))]
-    partial class PokemonMasterContextModelSnapshot : ModelSnapshot
+    [Migration("20240906135626_AddPokemonCaptures")]
+    partial class AddPokemonCaptures
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -27,18 +30,6 @@ namespace Coodesh_Pokemon.Migrations
 
                     b.Property<int>("PokemonMasterId")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("PokemonName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("PokemonSprite")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("PokemonTypes")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 

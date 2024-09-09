@@ -5,25 +5,35 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Coodesh_Pokemon.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
-    public class PokemonMastersController : Controller
+    [Route("api/[controller]")]
+    public class PokemonMastersController(PokemonMasterContext context) : Controller
     {
-        private readonly PokemonMasterContext _context;
+        private readonly PokemonMasterContext _context = context;
 
-        public PokemonMastersController(PokemonMasterContext context)
-        {
-            _context = context;
-        }
-
-        // GET: api/PokemonMasters
+        /// <summary>
+        /// Busca os Mestres Pokémon cadastrados
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// GET /api/PokemonMasters
+        /// </remarks>
+        /// <returns>Retorna a lista dos Mestres</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PokemonMaster>>> GetPokemonMasters()
         {
             return await _context.PokemonMasters.ToListAsync();
         }
 
-        // GET: api/PokemonMasters/5
+        /// <summary>
+        /// Busca um Mestre Pokémon através do ID
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// GET /api/PokemonMasters
+        /// </remarks>
+        /// <param name="id"></param>
+        /// <returns>Retorna os dados do Pokémon pesquisado</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<PokemonMaster>> GetPokemonMaster(int id)
         {
