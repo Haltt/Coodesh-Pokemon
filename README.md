@@ -1,68 +1,67 @@
 # Backend Challenge - Pokémons
 
-## Introdução
->  This is a challenge by [Coodesh](https://coodesh.com/)
+This is a project developed for a backend challenge by Coodesh. It focuses on providing an API that interacts with Pokémon data.
 
-Backend Challenge - Pokémons
-Teste da Codesh para testar habilidades de Front Developer
+## Descrição
 
-## Instruções
-1 - Clonar o reposi~tório para sua máquima, em seguida sugiro criar uma nova branch para evitar perdas dos arquivos originais.
-2 - Abrir o projeto no Visual Studio (ou progrma compatível)
-3 - Dentro do Visual Studio executar o projeto
+Este projeto foi desenvolvido como parte de um desafio técnico proposto pela Coodesh. Ele implementa uma API em .NET Core para fornecer informações sobre Pokémons, além de operações como busca e filtragem.
 
-### O Projeto
-- O Projeto tem uma Home contendo: 
-	- link para API
-	- Busca por ID (Número do Pokémon)
-		- 1 e 898 - número de Pokémons atualmente na PokeAPI (05/09/2024)
-	- Busca aleatória de 10 Pokémons
-	- Criação do Mestre Pokémon
-	- Capturar um Pokémon como Mestre
+## Tecnologias
 
-## Front-end
+- ASP.NET Core
+- Entity Framework Core
+- SQLite
+- Swagger para documentação da API
 
-### Home
-- Buscar Pokémon por ID (Número do Pokémon)
-	- 1 e 898 - número de Pokémons atualmente na PokeAPI (05/09/2024)
-- Gerar 12 Pokémons aleatórios
-- Criar um Mestre Pokémon
-- Capturar um Pokémon
+## Pré-requisitos
 
-### Privacidade
-- Redireciona para essa página explicando o que é o projeto
+- [.NET Core SDK](https://dotnet.microsoft.com/download)
+- Opcional: Docker para execução da aplicação
 
-### API
-- Redireciona para página contendo as APIs usadas no Projeto
+## Instalação
 
-## Backend-end
-Agora, você pode testar a API usando ferramentas como Postman ou cURL:
+1. Clone o repositório:
 
-### Buscar Pokémon específico
+```bash
+git clone https://github.com/Haltt/Coodesh-Pokemon.git
+cd Coodesh-Pokemon
 
-### Buscar 12 Pokémons de forma aleatória
+2. Configure o banco de dados no arquivo appsettings.json:
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Data Source=pokemonDB.db"
+  }
+}
 
-### Criação do Mestre:
-- Recebe Nome, Idade e CPF do Mestre
-
-GET /api/PokemonMasters: Lista todos os mestres Pokémon.
-GET /api/PokemonMasters/{id}: Obtém um mestre Pokémon pelo ID.
-POST /api/PokemonMasters: Cria um novo mestre Pokémon.
-PUT /api/PokemonMasters/{id}: Atualiza um mestre Pokémon existente.
-DELETE /api/PokemonMasters/{id}: Exclui um mestre Pokémon pelo ID.
-
-### Captura do Pokémon:
-- Recebe o CPF do mestre Pokémon.
-- Verifica no banco de dados se o mestre Pokémon existe.
-- Escolhe um Pokémon de forma aleatória entre 1 e 899.
-- Cria uma nova captura no banco de dados e vincula ao mestre.
-
-POST /api/PokemonCaptures/capture: Cria uma nova captura de Pokémon.
-
-### Criar e Aplicar as Migrações
-Após a criação dos arquivos de modelo do Mestre Pokémon (PokemonMaster.cs) aplicar as migrações a baixo para criação da base de dados.
-
-```shell
-dotnet ef migrations add InitialCreate
+3. Execute as migrações para configurar o banco de dados:
+```bash
 dotnet ef database update
-```
+dotnet run
+
+4. Acesse a documentação da API (Swagger) através do endereço:
+http://localhost:5000/api
+
+### Executando com Docker
+Para utilizar Docker, você pode rodar o seguinte comando:
+
+```bash
+docker-compose up --build
+
+### Testes
+Para executar os testes unitários, siga os passos abaixo:
+
+Verifique se as dependências estão instaladas e se o banco de dados de teste está configurado corretamente no appsettings.json da camada de testes.
+
+Abra o terminal na pasta raiz do projeto e execute o comando de teste:
+
+```bash
+dotnet test
+
+Este comando irá executar todos os testes definidos no projeto.
+
+Os testes de unidade estão localizados na pasta Coodesh-Pokemon.Tests, onde você pode encontrar casos de testes para verificar o funcionamento correto dos endpoints e serviços da API.
+
+Se você estiver utilizando o Docker, certifique-se de que os containers estão rodando antes de executar os testes.
+
+>  This is a challenge by [Coodesh](https://coodesh.com/)
